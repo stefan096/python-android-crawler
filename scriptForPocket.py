@@ -29,6 +29,7 @@ chromedriver_path = 'C:\\POKEMONI\\chromedriver.exe'
 
 
 options = webdriver.ChromeOptions()
+options.binary_location = "C:/Program Files/Google/Chrome/Application/chrome.exe"
 options.add_argument("enable-automation")
 options.add_argument("--no-sandbox")
 options.add_argument("--disable-extensions")
@@ -60,6 +61,8 @@ list_of_urls = [
     # 'https://www.imdb.com/title/tt2193021/'
 ]
 list_of_items_to_search = [
+# "Intuition",
+# "The Lincoln Lawyer (2011)"
 # 'kindnapping stella',
 # 'emily the criminal',
 # 'yara',
@@ -308,6 +311,10 @@ def process_data():
                 # Extracting the title
                 title_tag = header_container.find('span', {'data-testid': 'hero__primary-text'})
                 title_text = title_tag.get_text(strip=True) if title_tag else 'Title not found'
+
+                title_sub_text_container = soup.find('div', class_="sc-ec65ba05-1 fUCCIx")
+                title_sub_text = title_sub_text_container.get_text(strip=True) if title_sub_text_container else 'Title SubText not found'
+                # print(title_sub_text)
                 # print(title_text)
 
                 # Extracting the type (e.g., TV Mini Series)
@@ -324,7 +331,7 @@ def process_data():
                 # Find the rating
                 rating_container = soup.find(attrs={"data-testid": "hero-rating-bar__aggregate-rating__score"})
 
-                rating_tag = rating_container.find('span', class_='sc-eb51e184-1 ljxVSS')
+                rating_tag = rating_container.find('span')
                 rating_text = rating_tag.get_text(strip=True) if rating_tag else 'Rating not found'
                 # print(rating_text)
                 # Find the rating
@@ -338,7 +345,7 @@ def process_data():
                 # print(genres_text)
                 # Find the genres
 
-                append_content_into_file(SimpleNamespace(text=title_text), SimpleNamespace(text=rating_text), SimpleNamespace(text=genres_text), SimpleNamespace(text=type_text + "\n" + year_text))
+                append_content_into_file(SimpleNamespace(text=title_text + " \n" + title_sub_text), SimpleNamespace(text=rating_text), SimpleNamespace(text=genres_text), SimpleNamespace(text=type_text + "\n" + year_text))
 
                 # Find the image
                 image_tag = soup.find(class_=["ipc-image"])
